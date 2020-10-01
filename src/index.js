@@ -4,18 +4,41 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { Helmet } from "react-helmet";
 import { Provider } from "react-redux";
-import store from "./redux/store";
-
+import { createStore, applyMiddleware } from "redux";
+import reducer from "./redux/reducer";
+import logger from "redux-logger";
+import thunk from "redux-thunk";
 import { BrowserRouter as Router } from "react-router-dom";
 import ScrollToTop from "./shared/ScrollToTop";
+import { getCats } from "./Cats/actions";
+import { composeWithDevTools } from "redux-devtools-extension";
+import "./App.css";
+
+const { NODE_ENV } = process.env;
+const isDev = NODE_ENV === "development";
+
+const store = createStore(
+  reducer,
+  composeWithDevTools(
+    applyMiddleware(thunk, isDev ? logger : (s) => (n) => (a) => n(a))
+  )
+);
+
+store.dispatch(getCats());
 
 ReactDOM.render(
   <Provider store={store}>
     <Router>
       <Helmet>
-        <title>Ivo Digital Starter Project</title>
-        <meta property="og:title" content="Ivo Digital Starter Project" />
-        <meta property="og:site_name" content="Ivo Digital Starter Project" />
+        <title>Ivo Digital - Catsat Technical Assessment</title>
+        <meta
+          property="og:title"
+          content="Ivo Digital - Catsat Technical Assessment"
+        />
+        <meta
+          property="og:site_name"
+          content="Ivo Digital - Catsat Technical Assessment"
+        />
       </Helmet>
       <ScrollToTop>
         <App />

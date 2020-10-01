@@ -1,8 +1,6 @@
 import { combineReducers } from "redux";
-import cats from "../Cats";
-import cat from "../Cat";
+import cat from "./cat";
 
 export default combineReducers({
-  cats,
   cat
 });
